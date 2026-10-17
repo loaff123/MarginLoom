@@ -12,10 +12,16 @@ class InputTests(unittest.TestCase):
         self.p=Path(self.tmp.name)
         self.c=Contract.from_dict({'schema_version':1,'mode':'balanced','quantum':'.05','row_label':'id'})
     def put(self,name,text):
-        p=self.p/name; p.write_text(text,encoding='utf-8'); return p
+        # Fixtures describe exact source bytes; do not apply OS newline translation.
+        p=self.p/name; p.write_bytes(text.encode('utf-8')); return p
     def test_csv_bom_and_multiline(self):
         t=load_table(self.put('x.csv','\ufeffid,a,b\n"α\nβ",-1.25,9007199254740993.01\n'),self.c)
         self.assertEqual(t.row_ids,('α\nβ',)); self.assertEqual(t.column_ids,('a','b'))
+        self.assertEqual(t.values,(('-1.25','9007199254740993.01'),))
+    def test_csv_crlf_multiline_preserved(self):
+        t=load_table(self.put('crlf.csv','\ufeffid,a,b\r\n"α\r\nβ",-1.25,9007199254740993.01\r\n'),self.c)
+        self.assertEqual(t.row_ids,('α\r\nβ',))
+        self.assertEqual(t.column_ids,('a','b'))
         self.assertEqual(t.values,(('-1.25','9007199254740993.01'),))
     def test_row_label_can_be_middle(self):
         t=load_table(self.put('x.csv','a,id,b\n1,first,2\n'),self.c)
