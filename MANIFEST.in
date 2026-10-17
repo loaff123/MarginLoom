@@ -1,0 +1,6 @@
+include README.md LICENSE THIRD_PARTY.md
+recursive-include examples *.csv *.json
+include docs/DESIGN.md docs/QUALIFICATION.md docs/VERIFICATION.md
+recursive-include tools *.py
+recursive-include tests *.py
+recursive-include .github *.yml

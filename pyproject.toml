@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "marginloom"
+version = "0.1.0a1"
+description = "Exact decimal two-dimensional table rounding with verifiable reporting contracts"
+requires-python = ">=3.10"
+dependencies = ["networkx>=3.2,<4"]
+license = "MIT"
+readme = "README.md"
+
+[project.scripts]
+marginloom = "marginloom.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
